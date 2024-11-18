@@ -20,14 +20,12 @@ import java.util.Random;
 public class kostka extends Application {
     @Override
     public void start(Stage stage) {
-        //creating label email
         Label lbl1 = new Label("Podaj liczbe z przedziału 3-10");
         TextField text1 = new TextField();
         Button wyslij = new Button("Wyslij");
 
 
 
-        //Creating a Grid Pane
         GridPane gridPane = new GridPane();
 
 
@@ -35,7 +33,6 @@ public class kostka extends Application {
         gridPane.add(text1, 0,1);
         gridPane.add(wyslij,0,2);
 
-        //Setting size for the pane
         gridPane.setMinSize(500, 700);
 
 
@@ -45,10 +42,8 @@ public class kostka extends Application {
 
         gridPane.getChildren().add(groupKostka);
 
-        //Setting the padding
         gridPane.setPadding(new Insets(10, 10, 10, 10));
 
-        //Setting the vertical and horizontal gaps between the columns
         gridPane.setVgap(5);
         gridPane.setHgap(5);
 
@@ -59,7 +54,7 @@ public class kostka extends Application {
                 String out1 = text1.getText();
                 Integer out2 = Integer.parseInt(out1);
                 if (out2 <= 10 && out2 >= 3) {
-                    // Usuwanie poprzednich wyników i kostek
+
                     gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) >= 4);
 
                     VBox resultsBox = new VBox();
@@ -92,10 +87,8 @@ public class kostka extends Application {
                         wynik += randomCount;
                     }
 
-                    // Usuwanie istniejącej etykiety wyniku, jeśli istnieje
                     gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 9);
 
-                    // Dodanie nowej etykiety z wynikiem
                     Label wyniklbl = new Label("Liczba punktów to: " + wynik);
                     gridPane.add(wyniklbl, 0, 9);
 
