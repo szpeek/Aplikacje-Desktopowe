@@ -6,16 +6,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import javafx.event.EventHandler;
+
+import java.util.Random;
 
 public class kostka extends Application {
     @Override
@@ -43,9 +43,6 @@ public class kostka extends Application {
 
 
 
-
-
-
         gridPane.getChildren().add(groupKostka);
 
         //Setting the padding
@@ -58,56 +55,74 @@ public class kostka extends Application {
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                String out1 = new String(text1.getText());
+
+                String out1 = text1.getText();
                 Integer out2 = Integer.parseInt(out1);
-                if(out2 <= 10 && out2 >= 3){
-                    gridPane.getChildren().removeIf(node -> GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) >= 2);
-                    for(int i = 0; i < out2; i++){
+                if (out2 <= 10 && out2 >= 3) {
+                    // Usuwanie poprzednich wyników i kostek
+                    gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) >= 4);
+
+                    VBox resultsBox = new VBox();
+                    resultsBox.setSpacing(10);
+                    gridPane.add(resultsBox, 0, 4, 3, 1);
+
+                    Random random = new Random();
+
+                    int wynik = 0;
+                    for (int i = 0; i < out2; i++) {
                         GridPane radioButtonPane = new GridPane();
                         radioButtonPane.setPadding(new Insets(10));
                         radioButtonPane.setVgap(5);
                         radioButtonPane.setHgap(5);
 
-                        RadioButton btn1 = new RadioButton();
-                        RadioButton btn2 = new RadioButton();
-                        RadioButton btn3 = new RadioButton();
-                        RadioButton btn4 = new RadioButton();
-                        RadioButton btn5 = new RadioButton();
-                        RadioButton btn6 = new RadioButton();
+                        int randomCount = random.nextInt(6) + 1;
 
-                        radioButtonPane.add(btn1, 0, 0);
-                        radioButtonPane.add(btn2, 0, 1);
-                        radioButtonPane.add(btn3, 0, 2);
-                        radioButtonPane.add(btn4, 1, 0);
-                        radioButtonPane.add(btn5, 1, 1);
-                        radioButtonPane.add(btn6, 1, 2);
+                        for (int j = 0; j < randomCount; j++) {
+                            RadioButton radioButton = new RadioButton();
+                            radioButtonPane.add(radioButton, j % 2, j / 2);
+                        }
 
                         radioButtonPane.setStyle("-fx-border-color: black; -fx-border-width: 2;");
 
                         gridPane.add(radioButtonPane, 2 + i % 3, i / 3);
+
+                        Label resultLabel = new Label("Kostka nr " + (i + 1) + " wynik: " + randomCount);
+                        resultsBox.getChildren().add(resultLabel);
+
+                        wynik += randomCount;
                     }
 
+                    // Usuwanie istniejącej etykiety wyniku, jeśli istnieje
+                    gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 9);
 
+                    // Dodanie nowej etykiety z wynikiem
+                    Label wyniklbl = new Label("Liczba punktów to: " + wynik);
+                    gridPane.add(wyniklbl, 0, 9);
 
+                } else {
+                    Alert warning = new Alert(Alert.AlertType.WARNING);
+                    warning.setContentText("Podaj liczbe z przedziału 3-10");
+                    warning.show();
 
-                }else {
                     System.out.println("zle");
                 }
             }
+
+
+
+
+
         };
         wyslij.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
 
 
-        //Creating a scene object
+
         Scene scene = new Scene(gridPane, 500, 700);
 
-        //Setting title to the Stage
         stage.setTitle("Symulacja rzutu kostka");
 
-        //Adding scene to the stage
         stage.setScene(scene);
 
-        //Displaying the contents of the stage
         stage.show();
     }
     public static void main(String args[]){
