@@ -103,7 +103,7 @@ public class WeatherApp extends Application {
             weatherIcon.setImage(new Image(iconUrl));
 
         } catch (Exception e) {
-            weatherInfo.setText("Nie udało się pobrać danych");
+            weatherInfo.setText("Nie udało się pobrać danych" + e);
         }
     }
 
